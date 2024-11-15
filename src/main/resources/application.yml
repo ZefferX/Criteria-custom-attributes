@@ -1,0 +1,16 @@
+server:
+  port: 9500
+
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@localhost:1521/XE # Cambia a la URL de Oracle
+    username: system                        # Usuario de Oracle
+    password: example                       # Contraseña que configuraste en el contenedor
+    driver-class-name: oracle.jdbc.OracleDriver # Driver de Oracle JDBC
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    database-platform: org.hibernate.dialect.OracleDialect # Dialecto de Hibernate para Oracle
+  main:
+    web-application-type: servlet
