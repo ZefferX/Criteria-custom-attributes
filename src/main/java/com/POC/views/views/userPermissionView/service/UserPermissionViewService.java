@@ -30,5 +30,8 @@ public class UserPermissionViewService {
         return repository.findAll(spec);
     }
 
+    public List<UserPermissionView> findByGenericFilter(Specification<UserPermissionView> spec) {
+        return repository.findAll(spec);
+    }
 
 }
