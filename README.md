@@ -1,3 +1,8 @@
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 005](https://github.com/user-attachments/assets/6e10042d-d2c7-4f9f-b83a-25f9b2ace76e)
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 004](https://github.com/user-attachments/assets/01732607-b232-4fec-a57a-ca3a30d9462d)
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 003](https://github.com/user-attachments/assets/9595d703-94eb-4aae-847d-f32db9371f94)
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 002](https://github.com/user-attachments/assets/3ba3db24-ece3-4ec4-8309-41a67427896f)
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 001](https://github.com/user-attachments/assets/6cdcefdd-8467-4b8a-8f2e-a80a508ef660)
 # Documentación del Proyecto: Criteria Custom Attributes
 ## Introducción
 Este proyecto es una Prueba de Concepto (POC) para aplicar filtros dinámicos en vistas de bases de datos usando el patrón **Specification** con **JPA Criteria** en un entorno de **Spring Boot**. La aplicación interactúa con una base de datos Oracle y expone endpoints para realizar consultas sobre vistas de usuarios y permisos, con la capacidad de aplicar filtros personalizados en los atributos.
