@@ -622,9 +622,10 @@ El cual se ve de la siguiente manera:
 
 Y permite agregar el tipo de campo que queremos filtrar, el operador para dicho filtro y el valor que usara como filtro.
 
-Luego presionamos en Agregar Filtro y veremos como se agrega en los filtros activos:
-![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 002](https://github.com/user-attachments/assets/3ba3db24-ece3-4ec4-8309-41a67427896f)
 
+Luego presionamos en Agregar Filtro y veremos como se agrega en los filtros activos:
+
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 002](https://github.com/user-attachments/assets/3ba3db24-ece3-4ec4-8309-41a67427896f)
 
 
 
