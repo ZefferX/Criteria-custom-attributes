@@ -1,36 +1,103 @@
-**Documentación del Proyecto: Criteria Custom Attributes**
-
-**Introducción**
-
-Este proyecto es una Prueba de Concepto (POC) para aplicar filtros dinámicos en vistas de bases de datos usando el patrón Specification con JPA Criteria en un entorno de Spring Boot. La aplicación interactúa con una base de datos Oracle y expone endpoints para realizar consultas sobre vistas de usuarios y permisos, con la capacidad de aplicar filtros personalizados en los atributos.
+# Documentación del Proyecto: Criteria Custom Attributes
+## Introducción
+Este proyecto es una Prueba de Concepto (POC) para aplicar filtros dinámicos en vistas de bases de datos usando el patrón **Specification** con **JPA Criteria** en un entorno de **Spring Boot**. La aplicación interactúa con una base de datos Oracle y expone endpoints para realizar consultas sobre vistas de usuarios y permisos, con la capacidad de aplicar filtros personalizados en los atributos.
 
 -----
-**Requisitos Previos**
-
-1. **Java**: Asegúrate de tener Java 17 o superior instalado.
+## Requisitos Previos
+1. **Java**: Asegúrate de tener **Java 17** o superior instalado.
 1. **Maven**: Necesitarás Maven para manejar las dependencias y construir el proyecto.
-1. **Oracle Database**: Este proyecto está configurado para conectarse a una base de datos Oracle. Se recomienda configurar un contenedor de Oracle en Docker o utilizar una base de datos localmente.
+1. **Oracle Database**: Este proyecto está configurado para conectarse a una base de datos Oracle. Se recomienda configurar un contenedor de Oracle en Docker o utilizar una base de datos localmente (ver guía en la explicación).
 1. **Postman**: Para realizar pruebas en los endpoints proporcionados.
 -----
-**Configuración del Entorno**
+## Configuración del Entorno
+### **Instalación de Oracle**
+**Pregunta**: ¿Puedo descargar la versión para Linux e instalarla en Docker que posee Linux/Ubuntu?
 
-**Clonación del Repositorio**
+**Respuesta**: Sí, puedes descargar la versión de Oracle XE para Linux y usarla para construir la imagen en Docker, ya que la mayoría de las imágenes de Docker están basadas en Linux. Oracle proporciona el instalador de Oracle Database Express Edition (XE) para Linux en formato .rpm, que es compatible con las instrucciones de Docker para crear una imagen de Oracle XE en Linux.
+#### **Pasos para Descargar e Instalar Oracle XE en Docker para Linux**
+1. **Descarga el Instalador de Oracle XE para Linux**:
 
+   Ve a la página de descarga de Oracle XE y selecciona la versión de Linux (actualmente disponible como **Oracle Database 21c Express Edition for Linux x86-64** en un archivo .rpm). Descarga el archivo .rpm en tu computadora.
+
+1. **Clona el Repositorio de Docker de Oracle**:
+
+   Oracle tiene un repositorio en GitHub con scripts y configuraciones para construir imágenes de Docker para Oracle XE. Puedes clonarlo de la siguiente manera:
+
+   git clone https://github.com/oracle/docker-images.git
+
+1. **Coloca el Archivo .rpm en la Carpeta de Docker**:
+
+   Navega al directorio docker-images/OracleDatabase/SingleInstance/dockerfiles dentro del repositorio que acabas de clonar:
+
+   cd docker-images/OracleDatabase/SingleInstance/dockerfiles
+
+1. **Copia el Instalador de Oracle XE**:
+
+   Coloca el archivo .rpm que descargaste en la carpeta 21.3.0 (o la carpeta correspondiente a la versión de Oracle XE que estás usando):
+
+   cp /ruta/del/archivo/OracleXE-21c-Linux.x86\_64.rpm 21.3.0/
+
+1. **Construye la Imagen de Docker**:
+
+   Una vez que hayas copiado el archivo .rpm en la carpeta correcta, ejecuta el siguiente comando desde el directorio dockerfiles:
+
+   ./buildContainerImage.sh -x -v 21.3.0
+
+   1. -x: Indica que quieres construir la imagen de Oracle XE (Express Edition).
+   1. -v 21.3.0: Indica la versión que estás utilizando.
+
+Este comando construirá la imagen de Docker usando el archivo .rpm de Oracle XE y la versión de Linux.
+
+1. **Actualizar docker-compose.yml**:
+
+   Una vez que la imagen esté construida, puedes usarla en tu archivo docker-compose.yml especificando el nombre de la imagen que acabas de construir (por ejemplo, oracle/database:21.3.0-xe):
+
+   services:
+
+   `  `oracle-xe:
+
+   `    `container\_name: oracle-xe
+
+   `    `image: oracle/database:21.3.0-xe
+
+   `    `environment:
+
+   `      `ORACLE\_PWD: example           # Contraseña del usuario SYS, SYSTEM y PDBADMIN
+
+   `      `ORACLE\_CHARACTERSET: AL32UTF8 # Conjunto de caracteres
+
+   `    `ports:
+
+   `      `- "1521:1521"
+
+   `      `- "5500:5500"
+
+   `    `volumes:
+
+   `      `- ./oracle\_data:/opt/oracle/oradata
+
+   `    `restart: unless-stopped
+
+1. **Ejecuta el Contenedor**:
+
+   Ahora puedes iniciar el contenedor usando Docker Compose:
+
+   docker-compose up -d
+
+-----
+## Clonación del Repositorio
 Clona el repositorio desde GitHub:
-
-bash
 
 git clone https://github.com/ZefferX/Criteria-custom-attributes.git
 
 cd Criteria-custom-attributes
 
-**Configuración de la Base de Datos**
+-----
+## Configuración de la Base de Datos
+### **1. Crear las Tablas y Vistas en Oracle**
+Copia y ejecuta el siguiente script SQL en tu base de datos Oracle:
 
-1. **Crear las Tablas y Vistas en Oracle**
-
-   Copia y ejecuta el siguiente script SQL en tu base de datos Oracle:
-
-`	`-- Tabla de usuarios
+-- Tabla de usuarios
 
 CREATE TABLE app\_user (
 
@@ -90,7 +157,7 @@ CREATE TABLE user\_permissions (
 
 );
 
--- Datos de ejemplo para la tabla de usuarios
+-- Inserta datos de ejemplo para la tabla de usuarios
 
 INSERT INTO app\_user (name, active) VALUES ('Alice', 1);
 
@@ -104,7 +171,7 @@ INSERT INTO app\_user (name, active) VALUES ('Evelyn', 1);
 
 INSERT INTO app\_user (name, active) VALUES ('Frank', 1);
 
--- Datos de ejemplo para la tabla de oficinas
+-- Inserta datos de ejemplo para la tabla de oficinas
 
 INSERT INTO offices (name) VALUES ('Finance');
 
@@ -116,7 +183,7 @@ INSERT INTO offices (name) VALUES ('Customer Support');
 
 INSERT INTO offices (name) VALUES ('Marketing');
 
--- Datos de ejemplo para la tabla de permisos
+-- Inserta datos de ejemplo para la tabla de permisos
 
 INSERT INTO permissions (name) VALUES ('READ');
 
@@ -128,7 +195,7 @@ INSERT INTO permissions (name) VALUES ('USER\_MANAGEMENT');
 
 INSERT INTO permissions (name) VALUES ('EXPORT\_DATA');
 
--- Datos de ejemplo para la tabla de relación entre usuarios y oficinas
+-- Inserta datos de ejemplo para la tabla de relación entre usuarios y oficinas
 
 INSERT INTO user\_office (user\_id, office\_id) VALUES (1, 1);
 
@@ -142,7 +209,7 @@ INSERT INTO user\_office (user\_id, office\_id) VALUES (5, 1);
 
 INSERT INTO user\_office (user\_id, office\_id) VALUES (6, 3);
 
--- Datos de ejemplo para la tabla de relación entre usuarios y permisos
+-- Inserta datos de ejemplo para la tabla de relación entre usuarios y permisos
 
 INSERT INTO user\_permissions (user\_id, permission\_id) VALUES (1, 1);
 
@@ -156,7 +223,7 @@ INSERT INTO user\_permissions (user\_id, permission\_id) VALUES (5, 5);
 
 INSERT INTO user\_permissions (user\_id, permission\_id) VALUES (6, 1);
 
--- Vista de relaciones entre usuarios y oficinas
+-- Crea la vista de relaciones entre usuarios y oficinas
 
 CREATE OR REPLACE VIEW user\_offices\_view AS
 
@@ -182,7 +249,7 @@ JOIN user\_office uo ON u.id = uo.user\_id
 
 JOIN offices o ON uo.office\_id = o.id;
 
--- Vista de relaciones entre usuarios y permisos
+-- Crea la vista de relaciones entre usuarios y permisos
 
 CREATE OR REPLACE VIEW user\_permissions\_view AS
 
@@ -208,209 +275,182 @@ JOIN user\_permissions up ON u.id = up.user\_id
 
 JOIN permissions p ON up.permission\_id = p.id;
 
-### **Configuración de la Aplicación**
-Configura las credenciales de conexión a la base de datos en application.yml:
+## Ejecución del Proyecto
+Con las tablas ya creadas, podemos ejecutar nuestro repositorio.
 
-server:
+1. **Clonar el repositorio desde GitHub**:
 
-`  `port: 9500
+   git clone https://github.com/ZefferX/Criteria-custom-attributes.git
 
-spring:
+   cd Criteria-custom-attributes
 
-`  `datasource:
+1. **Configurar el Archivo application.properties**:
 
-`    `url: jdbc:oracle:thin:@localhost:1521/XE
+   Asegúrate de que tu archivo application.properties está correctamente configurado para conectarse a la base de datos Oracle que has configurado.
 
-`    `username: system
+1. **Ejecutar la Aplicación**:
 
-`    `password: example
+   Puedes ejecutar la aplicación usando Maven:
 
-`    `driver-class-name: oracle.jdbc.OracleDriver
+   mvn spring-boot:run
 
-`  `jpa:
+   O puedes construir el paquete y ejecutarlo:
 
-`    `hibernate:
+   mvn clean package
 
-`      `ddl-auto: update
-
-`    `show-sql: true
-
-`    `database-platform: org.hibernate.dialect.OracleDialect
-### **Compilar y Ejecutar el Proyecto**
-**Endpoints de la API**
-
-La API expone varios endpoints para realizar consultas en las vistas de usuarios y permisos.
-
-**Endpoint para Usuarios por Oficinas**
-
-1. **Obtener todas las oficinas de los usuarios**
-
-   **URL**: /api/user-office
-   **Método**: GET
-   **Descripción**: Devuelve todas las relaciones de usuarios con sus oficinas.
-
-1. **Buscar por ID de Vista de Oficina**
-
-   **URL**: /api/user-office/{id}
-   **Método**: GET
-   **Descripción**: Devuelve la relación específica de usuario y oficina por el ID de la vista.
-### ` `**A 1. Filtro de Offices**
-**Request URL:** http://localhost:9500/api/user-office/filter?userName=C&officeName=Cus
-
-**Explicación:**
-
-- Filtra los resultados donde userName contiene "C" y officeName contiene "Cus".
-
-**Expected Result:**
-
-json
-
-[
-
-`    `{
-
-`        `"id": 2,
-
-`        `"user\_id": 2,
-
-`        `"user\_name": "Charlie",
-
-`        `"user\_active": 1,
-
-`        `"office\_id": 4,
-
-`        `"office\_name": "Customer Support"
-
-`    `}
-
-]
-
-**Endpoint para Usuarios por Permisos**
-
-1. **Obtener todas las relaciones de permisos de usuarios**
-
-   **URL**: /api/user-permission
-   **Método**: GET
-   **Descripción**: Devuelve todas las relaciones entre usuarios y permisos.
-
-1. **Buscar Usuarios con un Permiso Específico**
-
-   **URL**: /api/user-permission/permission/{permissionId}
-   **Método**: GET
-   **Descripción**: Devuelve los usuarios que tienen un permiso específico basado en permissionId.
-### **Filtro de Permissions**
-**Endpoint:** GET http://localhost:9500/api/user-permission/filter
-
-**Request URL:** <http://localhost:9500/api/user-permission/filter?userName=Cha&permissionName=EXPORT>
-
-**Explicación:**
-
-- Filtra los resultados donde userName contiene "Cha" y permissionName contiene "EXPORT".
-
-**Expected Result:**[
-
-`    `{
-
-`        `"id": 3,
-
-`        `"user\_id": 3,
-
-`        `"user\_name": "Charlie",
-
-`        `"user\_active": 1,
-
-`        `"permission\_id": 3,
-
-`        `"permission\_name": "EXPORT\_DATA"
-
-`    `}
-
-]
-### **Explicación para Pruebas en Postman**
-1. **Configuración de Postman:**
-   1. Usa el método GET para ambos endpoints.
-   1. Asegúrate de que los parámetros userName y officeName o permissionName se incluyan como Query Params en la URL.
-1. **Ejemplo de Consulta para user-office Filter:**
-   1. En Query Params:
-      1. userName = C
-      1. officeName = Cus
-   1. Resultado esperado: Deberías ver un objeto JSON con información del usuario "Charlie" y la oficina "Customer Support".
-1. **Ejemplo de Consulta para user-permission Filter:**
-   1. En Query Params:
-      1. userName = Cha
-      1. permissionName = EXPORT
-   1. Resultado esperado: Deberías ver un objeto JSON con información del usuario "Charlie" y el permiso "EXPORT\_DATA".
-
-**¿Como agregar un nuevo atributo al criteria?**
-### **1. Modificación del DTO (OfficeFilterDTO)**
-Agrega el nuevo campo nickname al OfficeFilterDTO. Como estás usando record y @Builder, solo necesitas añadir el nuevo atributo en la definición.
-
-**Código actualizado de OfficeFilterDTO:**
-
-@Builder
-
-public record OfficeFilterDTO(
-
-`        `String officeName,
-
-`        `String userName,
-
-`        `String nickname // Nuevo atributo añadido
-
-) {}
+   java -jar target/Criteria-custom-attributes.jar
 
 -----
-### **2. Modificación de la Clase Specification (OfficeSpecification)**
-Agrega la condición del nuevo atributo nickname en el método getSpecifications para que se aplique el filtro si nickname no es null.
 
-**Código actualizado de OfficeSpecification:**
 
-@Component
 
-public class OfficeSpecification {
 
-`    `public static Specification<UserOfficeView> getSpecifications(OfficeFilterDTO filterDTO) {
 
-`        `Specification<UserOfficeView> spec = Specification.where(null);
 
-`        `if (filterDTO.officeName() != null) {
 
-`            `spec = spec.and((root, query, cb) ->
 
-`                    `cb.like(root.get("OFFICE\_NAME"), filterDTO.officeName() + "%"));
+
+
+
+## Pruebas de los Endpoints
+Una vez que tengas el proyecto en ejecución, deberías poder usar el servicio correctamente, enviando peticiones como:
+
+<http://localhost:9500/api/user-office/generic-filter?filters%5B0%5D%5Bfield%5D=userName&filters%5B0%5D%5Boperator%5D=like&filters%5B0%5D%5Bvalue%5D=Usu&filters%5B1%5D%5Bfield%5D=userId&filters%5B1%5D%5Boperator%5D=gt&filters%5B1%5D%5Bvalue%5D=80&page=0&size=5&sort=userId,asc>
+
+Y recibir de respuesta:
+
+{
+
+`    `"content": [
+
+`        `{
+
+`            `"id": 88,
+
+`            `"userId": 82,
+
+`            `"userName": "Usuario\_42",
+
+`            `"officeName": "Oficina\_72",
+
+`            `"officeId": "112"
+
+`        `},
+
+`        `{
+
+`            `"id": 21,
+
+`            `"userId": 83,
+
+`            `"userName": "Usuario\_43",
+
+`            `"officeName": "Oficina\_8",
+
+`            `"officeId": "48"
+
+`        `},
+
+`        `{
+
+`            `"id": 48,
+
+`            `"userId": 83,
+
+`            `"userName": "Usuario\_43",
+
+`            `"officeName": "Oficina\_38",
+
+`            `"officeId": "78"
+
+`        `},
+
+`        `{
+
+`            `"id": 71,
+
+`            `"userId": 84,
+
+`            `"userName": "Usuario\_44",
+
+`            `"officeName": "Oficina\_56",
+
+`            `"officeId": "96"
+
+`        `},
+
+`        `{
+
+`            `"id": 53,
+
+`            `"userId": 85,
+
+`            `"userName": "Usuario\_45",
+
+`            `"officeName": "Oficina\_41",
+
+`            `"officeId": "81"
 
 `        `}
 
-`        `if (filterDTO.userName() != null) {
+`    `],
 
-`            `spec = spec.and((root, query, cb) ->
+`    `"pageable": {
 
-`                    `cb.like(root.get("USER\_NAME"), filterDTO.userName() + "%"));
+`        `"pageNumber": 0,
 
-`        `}
+`        `"pageSize": 5,
 
-`        `// Nuevo filtro para el atributo "nickname"
+`        `"sort": {
 
-`        `if (filterDTO.nickname() != null) {
+`            `"empty": false,
 
-`            `spec = spec.and((root, query, cb) ->
+`            `"sorted": true,
 
-`                    `cb.like(root.get("NICKNAME"), filterDTO.nickname() + "%"));
+`            `"unsorted": false
 
-`        `}
+`        `},
 
-`        `return spec;
+`        `"offset": 0,
 
-`    `}
+`        `"paged": true,
+
+`        `"unpaged": false
+
+`    `},
+
+`    `"last": false,
+
+`    `"totalPages": 12,
+
+`    `"totalElements": 58,
+
+`    `"size": 5,
+
+`    `"number": 0,
+
+`    `"sort": {
+
+`        `"empty": false,
+
+`        `"sorted": true,
+
+`        `"unsorted": false
+
+`    `},
+
+`    `"first": true,
+
+`    `"numberOfElements": 5,
+
+`    `"empty": false
 
 }
 
 -----
-### **3. Modificación en el Modelo de Vista (UserOfficeView)**
-Agrega el nuevo campo nickname en la entidad UserOfficeView para que se pueda mapear a la columna correspondiente en la vista de la base de datos user\_offices\_view.
-
-**Código actualizado de UserOfficeView:**
-
+## **Cómo Agregar el Criteria a una Nueva Clase**
+**Requisitos:** Haber creado la nueva entidad en la base de datos, podria ser una clase cualquiera o directamente una view como esta creado el proyecto.
+### **Paso 1: Usando UserOfficeView como Modelo o Entidad**
 @Entity
 
 @Immutable
@@ -425,59 +465,183 @@ public class UserOfficeView {
 
 `    `private Integer id;
 
-`    `private Integer USER\_ID;
+`    `@Column(name = "USER\_ID")
 
-`    `private String USER\_NAME;
+`    `private Integer userId;
 
-`    `private String OFFICE\_NAME;
+`    `@Column(name = "USER\_NAME")
 
-`    `// Nuevo campo añadido
+`    `private String userName;
 
-`    `private String NICKNAME;
+`    `@Column(name = "OFFICE\_NAME")
+
+`    `private String officeName;
+
+`    `@Column(name = "OFFICE\_ID")
+
+`    `private String officeId;	
+
+// ES IMPORTANTE QUE LOS ATRIBUTOS COINCIDAN CON LO CARGADO EN LA BASE DE DATOS O EL FILTRO OBTENDRA UN ERROR
 
 }
 
-**Nota**: Asegúrate de que el atributo NICKNAME esté presente en la vista user\_offices\_view en la base de datos.
+
+
+
+
+
+
+
+### **Paso 2: Crear el Repositorio para UserOfficeView**
+El repositorio solo necesita extender JpaRepository e implementar JpaSpecificationExecutor para soportar el uso de Specifications:
+
+public interface UserOfficeViewRepository extends JpaRepository<UserOfficeView, Integer>, JpaSpecificationExecutor<UserOfficeView> {
+
+}
+### **Paso 3: Crear el Servicio para UserOfficeView**
+El servicio gestionará las consultas en la base de datos utilizando el Specification genérico:
+
+@Service
+
+@AllArgsConstructor
+
+public class UserOfficeViewService {
+
+`    `private final UserOfficeViewRepository repository;
+
+`    `public List<UserOfficeView> findAll() {
+
+`        `return repository.findAll();
+
+`    `}
+
+`    `public Page<UserOfficeView> findByGenericFilter(Specification<UserOfficeView> spec, Pageable pageable) {
+
+`        `return repository.findAll(spec, pageable);
+
+`    `}
+### **Paso 4: Crear el Controlador para UserOfficeView**
+@RestController
+
+@RequestMapping("/api/user-office")
+
+@AllArgsConstructor
+
+public class UserOfficeViewController {
+
+`    `private final UserOfficeViewService service;
+
+`    `// Endpoint para obtener todos los registros
+
+`    `@GetMapping
+
+`    `public List<UserOfficeView> findAll() {
+
+`        `return service.findAll();
+
+`    `}
+
+`    `@GetMapping("/generic-filter")
+
+`    `public Page<UserOfficeView> genericFilter(
+
+`            `@RequestParam Map<String, String> params,
+
+`            `@RequestParam(defaultValue = "0") int page, // Página inicial (por defecto: 0)
+
+`            `@RequestParam(defaultValue = "10") int size, // Tamaño de la página (por defecto: 10)
+
+`            `@RequestParam(defaultValue = "USER\_ID,asc") String sort // Orden (por defecto: USER\_ID ascendente)
+
+`    `) {
+
+`        `GenericFilterDTO filterDTO = FilterUtils.parseParamsToDTO(params);
+
+`        `Specification<UserOfficeView> spec = GenericSpecification.getSpecification(filterDTO);
+
+`        `// Construir el objeto Pageable
+
+`        `Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Order.by(sort.split(",")[0])
+
+.with(Sort.Direction.fromString(sort.split(",")[1]))));
+
+`        `return service.findByGenericFilter(spec, pageable);
+
+`    `}
+
+}
 
 -----
-### **Actualización en la Vista de la Base de Datos (user\_offices\_view)**
-Si el campo NICKNAME no existe en la vista de la base de datos user\_offices\_view, actualiza la vista para incluir este campo. Aquí tienes un ejemplo de cómo podría verse la vista actualizada:
+## **Resumen de Cómo Aplicar el Criteria Genérico**
+1. **Asegúrate de que tu Clase de Modelo esté Configurada Correctamente**:
+   1. Agrega la anotación @Entity y especifica el nombre de la tabla o vista en @Table.
+   1. Define los atributos que corresponden a las columnas de la base de datos.
+   1. Marca el campo de ID con @Id.
+1. **Extiende el Repositorio**:
+   1. Crea un repositorio que extienda JpaRepository y JpaSpecificationExecutor.
+1. **Crea un Servicio para Manejar las Consultas**:
+   1. Define un método que acepte una Specification como argumento para aplicar filtros y el pageable para la paginacion.
+1. **Crea un Controlador**:
+   1. Define un endpoint que acepte parámetros de consulta y los convierta en un GenericFilterDTO usando FilterUtils.
+   1. Usa el servicio para ejecutar el Specification.
 
-CREATE OR REPLACE VIEW user\_offices\_view AS
 
-SELECT 
 
-`    `ROWNUM AS id,
 
-`    `u.id AS user\_id,
 
-`    `u.name AS user\_name,
 
-`    `u.active AS user\_active,
 
-`    `o.id AS office\_id,
 
-`    `o.name AS office\_name,
 
-`    `u.nickname AS nickname -- Nuevo campo agregado
 
-FROM 
 
-`    `app\_user u
 
-JOIN 
 
-`    `user\_office uo ON u.id = uo.user\_id
 
-JOIN 
 
-`    `offices o ON uo.office\_id = o.id;
+**FRONTEND:**
 
------
-### **Resumen**
-1. **Modificaste OfficeFilterDTO** para agregar el nuevo campo nickname.
-1. **Actualizaste OfficeSpecification** para incluir el filtro por nickname.
-1. **Agregaste el atributo nickname en UserOfficeView** para mapear la columna correspondiente.
-1. **Aseguraste que la vista user\_offices\_view en la base de datos incluya el campo nickname**.
+Tambien tenemos un front basico para probar el Criteria en el repositorio, si abrimos la carpeta POC-Views-Front, por ejemplo en Visual Studio Code y ejecutamos en consola:
+node server.js
 
-Con estos cambios, podrás filtrar resultados utilizando el campo nickname en los criterios de búsqueda.
+Tendremos el front corriendo en el localhost:3000
+
+El cual se ve de la siguiente manera:
+
+![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.001.png)
+
+
+
+
+
+
+Y permite agregar el tipo de campo que queremos filtrar, el operador para dicho filtro y el valor que usara como filtro.
+
+![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.002.png)Luego presionamos en Agregar Filtro y veremos como se agrega en los filtros activos:
+
+
+
+
+
+
+
+
+
+
+
+
+
+Los cuales podemos borrar individualmente o todos a la vez con el boton de “Borrar Filtros” 
+
+Una vez agregado todos nuestros filtros presionamos en Aplicar Filtros:
+
+![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.003.png)
+
+Obteniendo los resultados correspondientes en caso de existir y pudiendo ver las paginas de resultados con los botones de anterior o siguiente.
+
+Por ultimo en la parte derecha tenemos el orderBy y order, el cual nos permite elegir por cual ID queremos filtrar, bien sea del usuario o permiso y en que orden queremos traerlos, por ejemplo:
+
+![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.004.png)Filtrando por el ID de la oficina de manera descendente:
+
+![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.005.png)
+
