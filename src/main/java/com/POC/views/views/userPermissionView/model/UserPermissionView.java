@@ -13,10 +13,15 @@ public class UserPermissionView {
     @Id
     private Long id;
 
-    @Column(name = "permission_id")
+    @Column(name = "PERMISSION_ID")
     private Long permissionId;
 
-    private Integer USER_ID;
-    private String USER_NAME;
-    private String PERMISSION_NAME;
+    @Column(name = "USER_ID")
+    private Integer userId;
+
+    @Column(name = "USER_NAME")
+    private String userName;
+
+    @Column(name = "PERMISSION_NAME")
+    private String permissionName;
 }

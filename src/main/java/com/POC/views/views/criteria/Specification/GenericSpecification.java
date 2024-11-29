@@ -44,14 +44,6 @@ public class GenericSpecification <T> {
                 }
             }
 
-            // Agregar orden
-            if (dto.orderBy() != null && dto.order() != null) {
-                if ("asc".equalsIgnoreCase(dto.order())) {
-                    query.orderBy(criteriaBuilder.asc(root.get(dto.orderBy())));
-                } else if ("desc".equalsIgnoreCase(dto.order())) {
-                    query.orderBy(criteriaBuilder.desc(root.get(dto.orderBy())));
-                }
-            }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };

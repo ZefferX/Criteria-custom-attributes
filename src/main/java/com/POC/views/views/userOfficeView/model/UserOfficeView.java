@@ -1,5 +1,6 @@
 package com.POC.views.views.userOfficeView.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -14,7 +15,15 @@ public class UserOfficeView {
     @Id
     private Integer id;
 
-    private Integer USER_ID;
-    private String USER_NAME;
-    private String OFFICE_NAME;
+    @Column(name = "USER_ID")
+    private Integer userId;
+
+    @Column(name = "USER_NAME")
+    private String userName;
+
+    @Column(name = "OFFICE_NAME")
+    private String officeName;
+
+    @Column(name = "OFFICE_ID")
+    private String officeId;
 }

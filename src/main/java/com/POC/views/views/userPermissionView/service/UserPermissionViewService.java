@@ -1,13 +1,14 @@
 package com.POC.views.views.userPermissionView.service;
 
 
-import com.POC.views.views.userPermissionView.dto.UserPermissionFilterDTO;
 import com.POC.views.views.userPermissionView.model.UserPermissionView;
 import com.POC.views.views.userPermissionView.repository.UserPermissionViewRepository;
-import com.POC.views.views.userPermissionView.specification.UserPermissionSpecification;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 
@@ -20,18 +21,9 @@ public class UserPermissionViewService {
         return repository.findAll();
     }
 
-    public List<UserPermissionView> findByPermissionId(Long permissionId){
-        return repository.findByPermissionId(permissionId);
 
-    }
-
-    public List<UserPermissionView> findFiltered(UserPermissionFilterDTO filterDTO) {
-        Specification<UserPermissionView> spec = UserPermissionSpecification.getSpecifications(filterDTO);
-        return repository.findAll(spec);
-    }
-
-    public List<UserPermissionView> findByGenericFilter(Specification<UserPermissionView> spec) {
-        return repository.findAll(spec);
+    public Page<UserPermissionView> findByGenericFilter(Specification<UserPermissionView> spec, Pageable pageable) {
+        return repository.findAll(spec, pageable);
     }
 
 }
