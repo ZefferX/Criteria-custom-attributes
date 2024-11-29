@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Filtros Dinámicos</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Filtros Dinámicos</h1>
+    <div id="main-container">
+      <!-- Motor de búsqueda a la izquierda -->
+      <div id="filter-container">
+        <div id="filter-form">
+          <h2>Agregar Filtro</h2>
+
+          <label for="search-category">Categoría:</label>
+          <select id="search-category">
+            <option value="user-permission">Permisos</option>
+            <option value="user-office">Oficinas</option>
+          </select>
+
+          <label for="search-field">Campo:</label>
+          <select id="search-field"></select>
+
+          <label for="operator">Operador:</label>
+          <select id="operator">
+            <option value="eq">Igual</option>
+            <option value="like">Contiene</option>
+            <option value="gt">Mayor que</option>
+            <option value="lt">Menor que</option>
+            <option value="gte">Mayor o igual que</option>
+            <option value="lte">Menor o igual que</option>
+          </select>
+
+          <label for="search-value">Valor:</label>
+          <input type="text" id="search-value" placeholder="Valor del filtro" />
+
+          <button id="add-filter" class="primary">Agregar Filtro</button>
+          <button id="clear-filters" class="secondary">Borrar Filtros</button>
+
+          <button id="apply-filters" class="primary">Aplicar Filtros</button>
+        </div>
+
+        <h2>Filtros Activos</h2>
+        <div id="filter-list"></div>
+      </div>
+
+      <!-- Tabla de resultados en el centro -->
+      <div id="results-container">
+        <h2>Resultados</h2>
+        <table id="results-table">
+          <thead id="results-header">
+            <tr>
+              <th>ID</th>
+              <th>ID Usuario</th>
+              <th>Nombre Usuario</th>
+              <th>ID</th>
+              <th>Nombre</th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+        <div id="pagination-container">
+            <button id="prev-page" class="secondary" disabled>Anterior</button>
+            <span id="page-info"></span>
+            <button id="next-page" class="primary" disabled>Siguiente</button>
+          </div>
+      </div>
+
+      
+      <!-- Controles de orden a la derecha -->
+      <div id="order-container">
+        <h2>Ordenar</h2>
+        <div class="order-section">
+          <label for="order-by">Ordenar por:</label>
+          <select id="order-by"></select>
+        </div>
+        <div class="order-section">
+          <label for="order">Orden:</label>
+          <select id="order">
+            <option value="asc">Ascendente</option>
+            <option value="desc">Descendente</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
