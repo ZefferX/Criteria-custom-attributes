@@ -1,8 +1,4 @@
-![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 005](https://github.com/user-attachments/assets/6e10042d-d2c7-4f9f-b83a-25f9b2ace76e)
-![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 004](https://github.com/user-attachments/assets/01732607-b232-4fec-a57a-ca3a30d9462d)
-![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 003](https://github.com/user-attachments/assets/9595d703-94eb-4aae-847d-f32db9371f94)
-![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 002](https://github.com/user-attachments/assets/3ba3db24-ece3-4ec4-8309-41a67427896f)
-![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 001](https://github.com/user-attachments/assets/6cdcefdd-8467-4b8a-8f2e-a80a508ef660)
+
 # Documentación del Proyecto: Criteria Custom Attributes
 ## Introducción
 Este proyecto es una Prueba de Concepto (POC) para aplicar filtros dinámicos en vistas de bases de datos usando el patrón **Specification** con **JPA Criteria** en un entorno de **Spring Boot**. La aplicación interactúa con una base de datos Oracle y expone endpoints para realizar consultas sobre vistas de usuarios y permisos, con la capacidad de aplicar filtros personalizados en los atributos.
@@ -604,6 +600,10 @@ public class UserOfficeViewController {
 
 
 
+
+
+
+
 **FRONTEND:**
 
 Tambien tenemos un front basico para probar el Criteria en el repositorio, si abrimos la carpeta POC-Views-Front, por ejemplo en Visual Studio Code y ejecutamos en consola:
@@ -613,7 +613,7 @@ Tendremos el front corriendo en el localhost:3000
 
 El cual se ve de la siguiente manera:
 
-![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.001.png)
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 001](https://github.com/user-attachments/assets/6cdcefdd-8467-4b8a-8f2e-a80a508ef660)
 
 
 
@@ -622,8 +622,8 @@ El cual se ve de la siguiente manera:
 
 Y permite agregar el tipo de campo que queremos filtrar, el operador para dicho filtro y el valor que usara como filtro.
 
-![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.002.png)Luego presionamos en Agregar Filtro y veremos como se agrega en los filtros activos:
-
+Luego presionamos en Agregar Filtro y veremos como se agrega en los filtros activos:
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 002](https://github.com/user-attachments/assets/3ba3db24-ece3-4ec4-8309-41a67427896f)
 
 
 
@@ -640,13 +640,13 @@ Los cuales podemos borrar individualmente o todos a la vez con el boton de “Bo
 
 Una vez agregado todos nuestros filtros presionamos en Aplicar Filtros:
 
-![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.003.png)
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 003](https://github.com/user-attachments/assets/9595d703-94eb-4aae-847d-f32db9371f94)
 
 Obteniendo los resultados correspondientes en caso de existir y pudiendo ver las paginas de resultados con los botones de anterior o siguiente.
 
 Por ultimo en la parte derecha tenemos el orderBy y order, el cual nos permite elegir por cual ID queremos filtrar, bien sea del usuario o permiso y en que orden queremos traerlos, por ejemplo:
 
-![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.004.png)Filtrando por el ID de la oficina de manera descendente:
+Filtrando por el ID de la oficina de manera descendente:
 
-![](Aspose.Words.b551f462-22a5-42d3-89f6-1059d0fd78f8.005.png)
+![Aspose Words b551f462-22a5-42d3-89f6-1059d0fd78f8 004](https://github.com/user-attachments/assets/01732607-b232-4fec-a57a-ca3a30d9462d)
 
